@@ -1,4 +1,4 @@
-import { Alert, Box, Button, CircularProgress, Stack, TextField, Typography } from '@mui/material';
+import { Alert, Box, Button, Stack, TextField, Typography } from '@mui/material';
 import React, { useState } from 'react';
 import { NetworkService } from '../../services';
 
@@ -7,7 +7,6 @@ export const FileUploader: React.FunctionComponent = () => {
   const [companyId, setCompanyId] = useState<string>();
   const [uploadMessage, setUploadMessage] = useState<string | null>(null);
   const [uploadSuccess, setUploadSuccess] = useState<boolean | null>(null);
-  const [loading, setLoading] = useState<boolean>(false);
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
@@ -25,7 +24,6 @@ export const FileUploader: React.FunctionComponent = () => {
       return;
     }
 
-    setLoading(true);
     setUploadMessage(null);
     setUploadSuccess(null);
 
@@ -38,14 +36,14 @@ export const FileUploader: React.FunctionComponent = () => {
       setUploadMessage('Upload failed. Please try again.');
       setUploadSuccess(false);
     }
-
-    setLoading(false);
   };
+
+  const uploadDisabled = !companyId || !selectedFile;
 
   return (
     <Box sx={{ padding: '2rem' }}>
       <Typography variant="h4" gutterBottom>
-        File Upload
+        File Upload only accept CSV
       </Typography>
 
       <Stack direction="row" spacing={2} alignItems="center" mb={3}>
@@ -64,11 +62,9 @@ export const FileUploader: React.FunctionComponent = () => {
       </Stack>
 
       <Stack direction="row" spacing={2} alignItems="center">
-        <Button variant="contained" onClick={handleUpload} disabled={loading}>
+        <Button variant="contained" onClick={handleUpload} disabled={uploadDisabled}>
           Upload File
         </Button>
-
-        {loading && <CircularProgress size={24} />}
       </Stack>
 
       {uploadMessage && (

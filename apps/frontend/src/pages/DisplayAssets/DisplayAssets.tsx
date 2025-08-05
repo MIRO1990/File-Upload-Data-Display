@@ -13,12 +13,14 @@ import {
 } from '@mui/material';
 import { HomeButton } from '../../Components/HomeButton';
 import { useAssetContext } from '../../dataCache/AssetsProvider';
+import { useQueryParams } from '../../dataCache/useQueryParams';
 
-const PAGE_SIZE = 5;
+const PAGE_SIZE = 50;
 
 export const DisplayAssets: React.FunctionComponent = () => {
   const { assets, refreshAssets } = useAssetContext();
   const [currentPage, setCurrentPage] = useState<number>(1);
+  const { companyId } = useQueryParams();
 
   const totalPages = Math.ceil(assets.length / PAGE_SIZE);
   const paginatedAssets = assets.slice((currentPage - 1) * PAGE_SIZE, currentPage * PAGE_SIZE);
@@ -28,8 +30,8 @@ export const DisplayAssets: React.FunctionComponent = () => {
   };
 
   useEffect(() => {
-    refreshAssets();
-  }, [refreshAssets]);
+    refreshAssets(companyId);
+  }, [companyId, refreshAssets]);
 
   return (
     <Box sx={{ padding: '2rem' }}>
