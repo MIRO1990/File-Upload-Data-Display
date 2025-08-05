@@ -1,4 +1,4 @@
-import { useCallback, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import type { CompanyId } from '../../entities';
 import { NetworkService } from '../../services';
 import { CompaniesContext } from './CompaniesContext';

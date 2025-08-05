@@ -1,10 +1,16 @@
 import { Box, Typography, List, Paper } from '@mui/material';
 import { CompanyListItem, NavigateUploadAssetsButton } from '../../Components';
 import { DisplayAssetsButton } from '../../Components/DisplayAssetsButton';
-
-const companyIds = ['Company-001', 'Company-002', 'Company-003'];
+import { useCompaniesContext } from '../../dataCache/CompaniesProvider';
+import { useEffect } from 'react';
 
 export const Home: React.FunctionComponent = () => {
+  const { companyIds, refreshCompanies } = useCompaniesContext();
+
+  useEffect(() => {
+    refreshCompanies();
+  }, [refreshCompanies]);
+
   return (
     <Box sx={{ padding: '2rem' }}>
       <Typography variant="h4" gutterBottom>
@@ -21,7 +27,7 @@ export const Home: React.FunctionComponent = () => {
       <Paper elevation={3} sx={{ maxWidth: '100%', height: 500, maxHeight: 500, overflow: 'auto' }}>
         <List>
           {companyIds.map(companyId => (
-            <CompanyListItem companyId={companyId} />
+            <CompanyListItem companyId={companyId} key={companyId} />
           ))}
         </List>
       </Paper>

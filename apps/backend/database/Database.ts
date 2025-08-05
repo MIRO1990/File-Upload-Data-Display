@@ -5,8 +5,7 @@ export class Database {
   private store: Map<CompanyId, Asset[]> = new Map();
 
   addAssets(companyId: CompanyId, assets: Asset[]): void {
-    const existing = this.store.get(companyId) || [];
-    this.store.set(companyId, [...existing, ...assets]);
+    this.store.set(companyId, assets);
   }
 
   getAssets(companyId?: CompanyId): Asset[] {

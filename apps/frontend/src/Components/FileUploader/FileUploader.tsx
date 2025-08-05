@@ -1,10 +1,13 @@
-import { Box, Button, Stack, TextField, Typography } from '@mui/material';
+import { Alert, Box, Button, CircularProgress, Stack, TextField, Typography } from '@mui/material';
 import React, { useState } from 'react';
+import { NetworkService } from '../../services';
 
 export const FileUploader: React.FunctionComponent = () => {
   const [selectedFile, setSelectedFile] = useState<File>();
-  const [uploadedData, setUploadedData] = useState<Array<Record<string, string | number>>>([]);
   const [companyId, setCompanyId] = useState<string>();
+  const [uploadMessage, setUploadMessage] = useState<string | null>(null);
+  const [uploadSuccess, setUploadSuccess] = useState<boolean | null>(null);
+  const [loading, setLoading] = useState<boolean>(false);
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
@@ -12,13 +15,31 @@ export const FileUploader: React.FunctionComponent = () => {
   };
 
   const handleUpload = async () => {
-    if (!selectedFile) return alert('No file selected');
+    if (!selectedFile) {
+      alert('No file selected');
+      return;
+    }
 
-    const formData = new FormData();
-    formData.append('file', selectedFile);
-    setUploadedData([]);
+    if (!companyId?.trim()) {
+      alert('Please enter a Company ID');
+      return;
+    }
 
-    alert('File uploaded successfully');
+    setLoading(true);
+    setUploadMessage(null);
+    setUploadSuccess(null);
+
+    const message = await NetworkService.uploadAssets(companyId, selectedFile);
+
+    if (message) {
+      setUploadMessage(message);
+      setUploadSuccess(true);
+    } else {
+      setUploadMessage('Upload failed. Please try again.');
+      setUploadSuccess(false);
+    }
+
+    setLoading(false);
   };
 
   return (
@@ -42,9 +63,19 @@ export const FileUploader: React.FunctionComponent = () => {
         </Button>
       </Stack>
 
-      <Button variant="contained" onClick={handleUpload}>
-        Upload File
-      </Button>
+      <Stack direction="row" spacing={2} alignItems="center">
+        <Button variant="contained" onClick={handleUpload} disabled={loading}>
+          Upload File
+        </Button>
+
+        {loading && <CircularProgress size={24} />}
+      </Stack>
+
+      {uploadMessage && (
+        <Alert severity={uploadSuccess ? 'success' : 'error'} sx={{ mt: 3 }}>
+          {uploadMessage}
+        </Alert>
+      )}
     </Box>
   );
 };

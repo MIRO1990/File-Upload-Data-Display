@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import {
   Table,
   TableBody,
@@ -12,25 +12,12 @@ import {
   Typography,
 } from '@mui/material';
 import { HomeButton } from '../../Components/HomeButton';
-
-type Asset = {
-  address: string;
-  latitude: number;
-  longitude: number;
-};
+import { useAssetContext } from '../../dataCache/AssetsProvider';
 
 const PAGE_SIZE = 5;
 
 export const DisplayAssets: React.FunctionComponent = () => {
-  const [assets, setAssets] = useState<Asset[]>([
-    { address: '123 Main St', latitude: 51.5074, longitude: -0.1278 },
-    { address: '456 High St', latitude: 48.8566, longitude: 2.3522 },
-    { address: '789 Park Ave', latitude: 40.7128, longitude: -74.006 },
-    { address: '321 Elm St', latitude: 35.6895, longitude: 139.6917 },
-    { address: '654 Oak St', latitude: 34.0522, longitude: -118.2437 },
-    { address: '987 Pine St', latitude: 41.9028, longitude: 12.4964 },
-  ]);
-
+  const { assets, refreshAssets } = useAssetContext();
   const [currentPage, setCurrentPage] = useState<number>(1);
 
   const totalPages = Math.ceil(assets.length / PAGE_SIZE);
@@ -39,6 +26,10 @@ export const DisplayAssets: React.FunctionComponent = () => {
   const handlePageChange = (_event: React.ChangeEvent<unknown>, page: number) => {
     setCurrentPage(page);
   };
+
+  useEffect(() => {
+    refreshAssets();
+  }, [refreshAssets]);
 
   return (
     <Box sx={{ padding: '2rem' }}>

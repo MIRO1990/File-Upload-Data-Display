@@ -2,6 +2,7 @@ import { Router } from 'express';
 import multer from 'multer';
 import { parse } from 'csv-parse/sync';
 import { database } from '../../database/Database.js';
+import { isValidAsset, normalizeAndParseAssets } from './helpers.js';
 
 const router = Router();
 const upload = multer({ storage: multer.memoryStorage() });
@@ -15,12 +16,12 @@ router.post('/upload', upload.single('assetFile'), (req, res) => {
   }
 
   try {
-    let parsedAssets;
+    let rawAssets: any[];
 
     if (file.mimetype === 'application/json') {
-      parsedAssets = JSON.parse(file.buffer.toString());
+      rawAssets = JSON.parse(file.buffer.toString());
     } else if (file.mimetype === 'text/csv') {
-      parsedAssets = parse(file.buffer.toString(), {
+      rawAssets = parse(file.buffer.toString(), {
         columns: true,
         skip_empty_lines: true,
       });
@@ -28,18 +29,23 @@ router.post('/upload', upload.single('assetFile'), (req, res) => {
       return res.status(400).json({ error: 'Unsupported file format. Use JSON or CSV.' });
     }
 
-    for (const asset of parsedAssets) {
-      if (!asset.address || !asset.latitude || !asset.longitude) {
-        return res
-          .status(400)
-          .json({ error: 'Each asset must have address, latitude, and longitude' });
-      }
+    const parsedAssets = normalizeAndParseAssets(rawAssets);
 
-      database.addAssets(companyId, asset);
+    for (const asset of parsedAssets) {
+      if (!isValidAsset(asset)) {
+        return res.status(400).json({
+          error:
+            'Each asset must have address, latitude, and longitude (case and space-insensitive).',
+        });
+      }
+      const validAssets = parsedAssets.filter(isValidAsset);
+
+      database.addAssets(companyId, validAssets);
     }
 
     res.status(200).json({ message: `Uploaded ${parsedAssets.length} assets.` });
   } catch (error) {
+    console.error('Upload error:', error);
     res.status(500).json({ error: 'Failed to parse or process file.' });
   }
 });
