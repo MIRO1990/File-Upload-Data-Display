@@ -28,7 +28,7 @@ After starting both apps, open `http://localhost:5173` in your browser.
 
 Upload CSV or JSON files with asset data
 
-View uploaded data by company ID
+View uploaded data by company ID, click on company id to filter assetsby company id
 
 Paginated table view for assets
 

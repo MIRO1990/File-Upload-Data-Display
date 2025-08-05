@@ -2,7 +2,7 @@ import type { Asset } from '../../database/entities/Asset.js';
 
 export const normalizeAndParseAssets = (
   rawData: Array<Record<string, unknown>>,
-): Array<Record<string, any>> => {
+): Array<Record<string, unknown>> => {
   return rawData.map(asset => {
     const normalized: Record<string, unknown> = {};
 
