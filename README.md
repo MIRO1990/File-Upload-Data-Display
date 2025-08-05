@@ -74,3 +74,25 @@ The uploaded files may be large, so future backend-side pagination and filtering
 Company IDs are passed via query params and used to filter uploaded data.
 
 The frontend and backend are separate apps but communicate over HTTP.
+
+# 📁 Large File Uploads
+
+- Stream files instead of reading entire buffer into memory:
+  Store uploads temporarily in disk or cloud (e.g. S3), and parse asynchronously.
+  Process rows in batches to prevent blocking the event loop.
+  Front end to only request the chunck needed using pagination
+- Async upload confirmation:
+  Respond quickly with a 202 (Accepted), and process the file in the background.
+  Notify user when processing is complete (polling, WebSocket, or email).
+
+# 👥 Multiple Companies Uploading Simultaneously
+
+Isolate uploads per company:aready in place
+Using a Map<CompanyId, Asset[]> structure in memory for quick access, or a DB partitioned by companyId.
+
+- Concurrency handling:
+  Backend should be stateless; use cache/DB to avoid race conditions.
+  Rate-limit per company or IP if needed to prevent abuse.
+
+- Horizontal scaling:
+  Deploy multiple backend instances with shared DB or message broker.
