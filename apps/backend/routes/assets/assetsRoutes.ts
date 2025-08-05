@@ -16,7 +16,7 @@ router.post('/upload', upload.single('assetFile'), (req, res) => {
   }
 
   try {
-    let rawAssets: any[];
+    let rawAssets: Record<string, unknown>[];
 
     if (file.mimetype === 'application/json') {
       rawAssets = JSON.parse(file.buffer.toString());

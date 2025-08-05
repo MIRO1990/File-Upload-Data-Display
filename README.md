@@ -28,8 +28,6 @@ After starting both apps, open `http://localhost:5173` in your browser.
 
 Upload CSV or JSON files with asset data
 
-Normalize and validate uploaded asset fields
-
 View uploaded data by company ID
 
 Paginated table view for assets
