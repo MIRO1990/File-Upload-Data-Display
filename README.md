@@ -1,29 +1,76 @@
-# File-Upload-Data-Display
+# 📦 File-Upload-Data-Display
 
-Upload a file and display data in that file
+A full-stack TypeScript application to **upload CSV/JSON files** containing asset data and **view the uploaded data** by company with pagination and filtering.
 
-# Getting started
+---
 
-- Navigate to apps/frontend
-- run npm install
-- run npm run dev
+## 🚀 Getting Started
 
-- navigate to apps/backend
-- run npm install
-- run npm run dev
+### 🖥️ Frontend
 
-after runnifn both, navigate to `http://localhost:5173/`
+```bash
+cd apps/frontend
+npm install
+npm run dev
+```
 
-Upload a file and display data in that file
+🛠️ Backend
 
-# Assumptions
+```bash
+cd apps/backend
+npm install
+npm run dev
+```
 
-File size isn't specified so we will assume that it can be large data
-we can add pagination that requests data from the backend with filters
-we can add integration and end to end test
-we can add css files seprated from the rest
-we can add data-test ids
-add validation on company id
-we can add loading to improve user experience
-we can add front end validation to imporve user experinec
-we can run the full front end and backend in one command
+After starting both apps, open `http://localhost:5173` in your browser.
+
+# Features
+
+Upload CSV or JSON files with asset data
+
+Normalize and validate uploaded asset fields
+
+View uploaded data by company ID
+
+Paginated table view for assets
+
+Display list of available companies
+
+Error messaging and file validation
+
+Built using React, Express, TypeScript, and Material UI
+
+# 🌱 Future Improvements
+
+Validate and sanitize companyId input
+
+Add loading indicators to improve UX
+
+Add search/filter to asset and company views
+
+Separate CSS styling for cleaner UI management
+
+Support .xlsx Excel file upload
+
+End-to-end & integration testing (Cypress, Playwright, etc.)
+
+Use data-testid attributes for testing selectors
+
+Combine frontend and backend startup via root-level script (e.g. npm run dev with concurrently)
+
+Enable backend pagination and filters
+
+# 📦 Tech Stack
+
+Layer Tools
+Frontend React, TypeScript, Material UI
+Backend Node.js, Express, TypeScript
+File Parsing csv-parse, multer
+
+# 🧠 Assumptions
+
+The uploaded files may be large, so future backend-side pagination and filtering is assumed.
+
+Company IDs are passed via query params and used to filter uploaded data.
+
+The frontend and backend are separate apps but communicate over HTTP.

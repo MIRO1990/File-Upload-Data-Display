@@ -43,7 +43,7 @@ export const FileUploader: React.FunctionComponent = () => {
   return (
     <Box sx={{ padding: '2rem' }}>
       <Typography variant="h4" gutterBottom>
-        File Upload only accept CSV
+        File Upload only CSV
       </Typography>
 
       <Stack direction="row" spacing={2} alignItems="center" mb={3}>
